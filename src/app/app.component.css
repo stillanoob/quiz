@@ -1,0 +1,23 @@
+.container{
+
+  width: 70%;
+  background-color: 	#e5f8d0;
+  margin: 20px auto;
+  overflow: auto;
+  border-radius: 1em;
+
+}
+h3{
+  font-family: cursive;
+}
+.element{
+  font-family: cursive;
+  list-style: none;
+  background-color: #f4fff2;
+  border-radius: 1em;
+  padding: 1%;
+}
+.elementInput{
+  margin-right: 1%;
+  margin-left: 1%;
+}
