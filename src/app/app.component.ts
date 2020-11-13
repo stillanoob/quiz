@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Level } from './level';
 import { Question } from './question';
-import { Test } from './test';
+import { Quiz} from './quiz';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,7 @@ export class AppComponent {
   title = 'quiz-front';
   opened = false;
   public progressbarvalue;
-  public test: Test;
+  public test: Quiz;
   public currentLevel: number;
   public essay = {};
   public progress: number;
@@ -21,7 +21,7 @@ export class AppComponent {
   constructor(){
     this.progressbarvalue = 0;
     this.currentLevel = 0;
-    this.test = new Test();
+    this.test = new Quiz();
     this.test.questionPerLevel = 3;
 
     let questions = [];
