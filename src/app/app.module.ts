@@ -10,6 +10,11 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {FormsModule} from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { HttpClientModule } from '@angular/common/http';
+import { QuestionService } from './question.service';
+import { QuizService } from './quiz.service';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 
 
 @NgModule({
@@ -25,10 +30,11 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatSidenavModule,
     FormsModule,
     MatCardModule,
-    MatProgressBarModule
-
+    MatProgressBarModule,
+    HttpClientModule,
+    MatSnackBarModule
   ],
-  providers: [],
+  providers: [QuestionService, QuizService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

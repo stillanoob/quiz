@@ -1,6 +1,6 @@
 .body{
-  
-  background-image: url(C:\Users\21655\Documents\quiz\quiz\src\assets\aa.png)  ;
+
+  background-image: url(../assets/aa.png)  ;
   -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -9,13 +9,13 @@ background-size: cover;
 }
 
 .quiz{
-  
+
   width: 600px;
   padding: 50px;
   background: rgba(255, 255, 255, 0.486);
   box-shadow: 0 5px 15px rgba(0,0,0,.5);
   margin-left: 25%;
- 
+
 }
 
 h3{
@@ -41,7 +41,7 @@ width: 500px;
 transform: translateX(10px);
 cursor: pointer;
  }
-  
+
 .element:hover:before{
   opacity: 1;
 
@@ -101,5 +101,5 @@ user-select: none;
 }
 .image{
    margin-left: 24%;
-  
+
 }

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Level } from './level';
 import { Question } from './question';
+import { QuestionService } from './question.service';
 import { Quiz} from './quiz';
+import { QuizService } from './quiz.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +14,9 @@ import { Quiz} from './quiz';
 export class AppComponent {
   title = 'quiz-front';
   opened = false;
+  public questions = [];
+  public userid = '5faf40f46b85e13d1cbab2d8';
+  public quizid = '5faf5ebcef6fff29180d8333';
   public progressbarvalue;
   public test: Quiz;
   public currentLevel: number;
@@ -18,10 +24,12 @@ export class AppComponent {
   public progress: number;
   public lastlevel = false;
   public notlastlevel = !this.lastlevel;
-  constructor(){
+  public loaded = false;
+  constructor(private quizservice: QuizService, private snackbar: MatSnackBar, private questionservice: QuestionService) {
     this.progressbarvalue = 0;
     this.currentLevel = 0;
-    this.test = new Quiz();
+
+    /*this.test = new Quiz();
     this.test.questionPerLevel = 3;
 
     let questions = [];
@@ -72,9 +80,9 @@ export class AppComponent {
     questions.push(q5);
     questions.push(q6);
 
-    this.test.levels = this.levelsplitter(questions);
-    this.lastlevel = this.test.levels.length === this.currentLevel;
-    this.notlastlevel = !this.lastlevel;
+    this.test.levels = this.levelsplitter(questions);*/
+
+    this.gettingQuiz(this.quizid);
   }
   nextlevel(){
     let eligible = this.scoring();
@@ -85,9 +93,35 @@ export class AppComponent {
       console.log('next level', this.currentLevel);
       console.log(this.notlastlevel);
     }else{
-      alert('you are not elligable to move to the next level');
+      this.snackbar.open('You are not eligible to move to the next level', 'Close', {
+        duration: 2000,
+        verticalPosition: 'top'
+      });
     }
 
+  }
+  gettingQuiz(quizid){
+    this.quizservice.getQuiz(quizid).subscribe(
+      (data) => {
+        this.test = new Quiz();
+        this.test.levelClearRate = data.levelClearRate;
+        this.test.questionPerLevel = data.questionPerLevel;
+        this.test.name = data.name;
+        this.quizservice.startQuiz(this.userid, quizid);
+        this.gettingQuestions(this.quizid);
+      }
+    );
+  }
+  gettingQuestions(quizid: string){
+    this.questionservice.getQuestionByQuiz(quizid).subscribe(
+      (data) => {
+        this.questions = data;
+        this.test.levels = this.levelsplitter();
+        this.lastlevel = this.test.levels.length === this.currentLevel;
+        this.notlastlevel = !this.lastlevel;
+        this.loaded = true;
+      }
+    );
   }
   scoring(){
     let score = 0;
@@ -97,17 +131,29 @@ export class AppComponent {
     for(let i=0; i<questions.length; i++){
       if(this.essay[questions[i].question]){
         score += goodanswer;
+        this.questionservice.answerQuestionRight(this.userid, questions[i].id).subscribe(
+          (data) => {
+            console.log(data);
+          }
+        );
+      }else{
+        this.questionservice.answerQuestionWrong(this.userid, questions[i].id).subscribe(
+          (data) => {
+            console.log(data);
+          }
+        );
       }
     }
     return score >= this.test.levelClearRate;
   }
-  levelsplitter(questions:any){
+  levelsplitter() {
+    let questions = this.questions;
     let levels=[];
     let numberOfQuestions = questions.length;
     let level: Level;
-    for(let i = 0; i < numberOfQuestions; i++){
-      if((i % this.test.questionPerLevel) === 0){
-        if (level) {
+    for (let i = 0; i < numberOfQuestions; i++) {
+      if ((i % this.test.questionPerLevel) === 0) {
+        if (level !== undefined) {
           levels.push(level);
         }
         level = new Level();
@@ -132,7 +178,5 @@ export class AppComponent {
     }
     this.essay[question] = reply;
     console.log(this.essay);
-    this.progressbarvalue = ((Object.keys(this.essay).length /
-    this.test.levels[this.currentLevel].questions.length) * 100).toString() + '%';
   }
 }
