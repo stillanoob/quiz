@@ -1,11 +1,21 @@
-<mat-progress-bar mode="determinate" [(value)]="progressbarvalue"></mat-progress-bar>
-<div class="container" *ngFor="let question of test.levels[currentLevel].questions">
-  <h3>{{question.question}}</h3>
-  <ul *ngFor="let choice of question.reponses">
-    <li (click)="elementInputHandler($event)" class="element">
-      <input (click)="elementInputHandler($event)" class="elementInput" [name]="question.question" type="radio" [value]="choice==question.correctReponse"/>{{choice}}
-    </li>
-  </ul>
-</div>
-<button *ngIf='notlastlevel' (click)="nextlevel()">Next Level</button>
-<button *ngIf='lastlevel'>Finish Test</button>
+<div class="body">
+    <div class="quiz">
+       <div class="image"> <img  src="../assets/tt.png" alt="t"></div>
+    <div class="container" *ngFor="let question of test.levels[currentLevel].questions">
+      <h3>{{question.question}}</h3>
+      <ul *ngFor="let choice of question.reponses">
+        <li (click)="elementInputHandler($event)" class="element">
+          <input (click)="elementInputHandler($event)" class="elementInput" [name]="question.question" type="radio" [value]="choice==question.correctReponse"/>{{choice}}
+        </li>
+      </ul>
+      
+    </div>
+   
+      <button *ngIf='notlastlevel' class="boutton-next" (click)="nextlevel()">Next Level</button>
+      <button class="boutton-finish"  *ngIf='lastlevel'>Finish Test</button>
+    </div>
+  
+    
+    
+    
+    </div>
